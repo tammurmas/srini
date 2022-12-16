@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="Urmas Tamm">
+        <comment>Create new schema, add client, user and country tables, populate tables with test data</comment>
+        <sql>
+            <![CDATA[
+                CREATE SCHEMA srini;
+            ]]>
+        </sql>
+
+        <createTable schemaName="srini" tableName="country">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="country_id_pk" />
+            </column>
+            <column name="name" type="varchar(100)" />
+        </createTable>
+
+        <createTable schemaName="srini" tableName="client">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="client_id_pk" />
+            </column>
+            <column name="firstname" type="varchar(100)" />
+            <column name="lastname" type="varchar(100)" />
+            <column name="username" type="varchar(100)" />
+            <column name="email" type="varchar(100)" />
+            <column name="address" type="text" />
+            <column name="country_id" type="bigint" remarks="country.id reference">
+                <constraints foreignKeyName="fk_client_country" references="srini.country(id)" />
+            </column>
+        </createTable>
+        <createIndex schemaName="srini" tableName="client" indexName="idx_client_country_id">
+            <column name="country_id" />
+        </createIndex>
+
+        <createTable schemaName="srini" tableName="auth_user">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="auth_user_id_pk" />
+            </column>
+            <column name="username" type="varchar(100)" />
+            <column name="password" type="text" />
+        </createTable>
+
+        <sql>
+            <![CDATA[
+            INSERT INTO srini.auth_user(username, password)
+            VALUES ('user1', '7c6a180b36896a0a8c02787eeafb0e4c');
+            INSERT INTO srini.auth_user(username, password)
+            VALUES ('user2', '6cb75f652a9b52798eb6cf2201057c73');
+            INSERT INTO srini.auth_user(username, password)
+            VALUES ('user3', '819b0643d6b89dc9b579fdfc9094f28e');
+            INSERT INTO srini.country(name) VALUES('Estonia');
+            INSERT INTO srini.country(name) VALUES('Latvia');
+            INSERT INTO srini.country(name) VALUES('Lithuania');
+            INSERT INTO srini.country(name) VALUES('Finland');
+            INSERT INTO srini.country(name) VALUES('Sweden');
+            ]]>
+        </sql>
+    </changeSet>
+</databaseChangeLog>
