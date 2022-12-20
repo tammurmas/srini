@@ -5,58 +5,84 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet id="1" author="Urmas Tamm">
-        <comment>Create new schema, add client, user and country tables, populate tables with test data</comment>
-        <sql>
-            <![CDATA[
-                CREATE SCHEMA srini;
-            ]]>
-        </sql>
+        <comment>Create client, user and country tables, populate tables with test data</comment>
 
-        <createTable schemaName="srini" tableName="country">
-            <column name="id" autoIncrement="true" type="bigint">
-                <constraints primaryKey="true" primaryKeyName="country_id_pk" />
-            </column>
-            <column name="name" type="varchar(100)" />
-        </createTable>
-
-        <createTable schemaName="srini" tableName="client">
-            <column name="id" autoIncrement="true" type="bigint">
-                <constraints primaryKey="true" primaryKeyName="client_id_pk" />
-            </column>
-            <column name="firstname" type="varchar(100)" />
-            <column name="lastname" type="varchar(100)" />
-            <column name="username" type="varchar(100)" />
-            <column name="email" type="varchar(100)" />
-            <column name="address" type="text" />
-            <column name="country_id" type="bigint" remarks="country.id reference">
-                <constraints foreignKeyName="fk_client_country" references="srini.country(id)" />
-            </column>
-        </createTable>
-        <createIndex schemaName="srini" tableName="client" indexName="idx_client_country_id">
-            <column name="country_id" />
-        </createIndex>
-
-        <createTable schemaName="srini" tableName="auth_user">
-            <column name="id" autoIncrement="true" type="bigint">
+        <createTable tableName="auth_user">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="auth_user_id_pk" />
             </column>
-            <column name="username" type="varchar(100)" />
-            <column name="password" type="text" />
+            <column name="username" type="varchar(100)" >
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_auth_user_username"/>
+            </column>
+            <column name="password" type="varchar(100)" >
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <createTable tableName="country">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="country_id_pk" />
+            </column>
+            <column name="name" type="varchar(100)" >
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_country_name"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="client">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="client_id_pk" />
+            </column>
+            <column name="firstname" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(100)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_client_username"/>
+            </column>
+            <column name="email" type="varchar(100)" >
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_client_email"/>
+            </column>
+            <column name="address" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auth_user_id" type="bigint" remarks="auth_user.id reference">
+                <constraints nullable="false" foreignKeyName="fk_client_auth_user" references="auth_user(id)" />
+            </column>
+            <column name="country_id" type="bigint" remarks="country.id reference">
+                <constraints nullable="false" foreignKeyName="fk_client_country" references="country(id)" />
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by" type="varchar(50)"/>
+            <column name="updated_date" type="timestamp"/>
+        </createTable>
+        <createIndex tableName="client" indexName="idx_client_country_id">
+            <column name="country_id" />
+        </createIndex>
+        <createIndex tableName="client" indexName="idx_client_auth_user_id">
+            <column name="auth_user_id" />
+        </createIndex>
 
         <sql>
             <![CDATA[
-            INSERT INTO srini.auth_user(username, password)
+            INSERT INTO auth_user(username, password)
             VALUES ('user1', '7c6a180b36896a0a8c02787eeafb0e4c');
-            INSERT INTO srini.auth_user(username, password)
+            INSERT INTO auth_user(username, password)
             VALUES ('user2', '6cb75f652a9b52798eb6cf2201057c73');
-            INSERT INTO srini.auth_user(username, password)
+            INSERT INTO auth_user(username, password)
             VALUES ('user3', '819b0643d6b89dc9b579fdfc9094f28e');
-            INSERT INTO srini.country(name) VALUES('Estonia');
-            INSERT INTO srini.country(name) VALUES('Latvia');
-            INSERT INTO srini.country(name) VALUES('Lithuania');
-            INSERT INTO srini.country(name) VALUES('Finland');
-            INSERT INTO srini.country(name) VALUES('Sweden');
+
+            INSERT INTO country(name) VALUES('Estonia');
+            INSERT INTO country(name) VALUES('Latvia');
+            INSERT INTO country(name) VALUES('Lithuania');
+            INSERT INTO country(name) VALUES('Finland');
+            INSERT INTO country(name) VALUES('Sweden');
             ]]>
         </sql>
     </changeSet>

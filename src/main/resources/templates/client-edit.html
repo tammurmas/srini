@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Add Client</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <!--<link href="form-validation.css" rel="stylesheet">-->
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2 th:text="${client.id != null} ? 'Edit Client' : 'Add Client'"></h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 order-md-1">
+                <form class="needs-validation" novalidate method="POST" th:action="@{/save}" th:object="${client}">
+                    <div class="row">
+                        <input type="hidden" th:field="*{id}" />
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">First name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" th:field="*{firstName}">
+                            <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}"></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Last name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" th:field="*{lastName}">
+                            <p th:if="${#fields.hasErrors('lastName')}" th:errorclass="error" th:errors="*{lastName}"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Username" th:field="*{userName}">
+                        <p th:if="${#fields.hasErrors('userName')}" th:errorclass="error" th:errors="*{userName}"></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com" th:field="*{email}">
+                        <p th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}"></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" th:field="*{address}">
+                        <p th:if="${#fields.hasErrors('address')}" th:errorclass="error" th:errors="*{address}"></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="country">Country</label>
+                        <select class="custom-select d-block w-100" id="country" th:field="*{countryId}">
+                            <option value="">Choose...</option>
+                            <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"
+                                    th:selected="${country.id == client.countryId}"></option>
+                        </select>
+                        <p th:if="${#fields.hasErrors('address')}" th:errorclass="error" th:errors="*{countryId}"></p>
+                    </div>
+                    <hr class="mb-4">
+
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" th:text="${client.id != null} ? 'Edit Client' : 'Add Client'"></button>
+                </form>
+            </div>
+        </div>
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; 2018 Company Name</p>
+        </footer>
+    </div>
+</body>
+</html>
