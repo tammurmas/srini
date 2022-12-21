@@ -38,11 +38,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional(readOnly = true)
-    public ClientDTO findUserById(long id) {
+    public Optional<ClientDTO> findClientById(long id) {
         Optional<Client> optionalClient = clientRepository.findOneById(id);
-        ClientDTO dto = null;
+        Optional<ClientDTO> dto = Optional.empty();
         if (optionalClient.isPresent()) {
-            dto = ClientDTO.ofClient(optionalClient.get());
+            dto = Optional.of(ClientDTO.ofClient(optionalClient.get()));
         }
         return dto;
     }

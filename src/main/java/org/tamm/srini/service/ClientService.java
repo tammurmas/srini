@@ -10,7 +10,7 @@ public interface ClientService {
 
     List<ClientDTO> findAllUserClients();
 
-    ClientDTO findUserById(long id);
+    Optional<ClientDTO> findClientById(long id);
 
     Client createClient(ClientDTO clientDTO);
 

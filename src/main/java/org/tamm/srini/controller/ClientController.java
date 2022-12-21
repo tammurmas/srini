@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tamm.srini.model.Client;
 import org.tamm.srini.service.ClientService;
 import org.tamm.srini.service.CountryService;
@@ -38,11 +39,17 @@ public class ClientController {
     }
 
     @GetMapping({"/add", "/{clientId}/edit"})
-    public String editClient(@PathVariable Optional<Long> clientId, Model model) {
-        ClientDTO client = new ClientDTO();
+    public String editClient(@PathVariable Optional<Long> clientId, Model model, RedirectAttributes redirAttrs) {
         if (!model.containsAttribute("client")) {
+            ClientDTO client = new ClientDTO();
             if (clientId.isPresent()) {
-                client = clientService.findUserById(clientId.get());
+                Optional<ClientDTO> optionalClient = clientService.findClientById(clientId.get());
+                if (optionalClient.isEmpty()) {
+                    redirAttrs.addFlashAttribute("error", "Client not found!");
+                    return "redirect:/list";
+                } else {
+                    client = optionalClient.get();
+                }
             }
             model.addAttribute("client", client);
         }
@@ -52,10 +59,10 @@ public class ClientController {
     }
 
     @PostMapping("/save")
-    public String saveClient(@Valid @ModelAttribute("client") ClientDTO client, BindingResult result, Model model) {
+    public String saveClient(@Valid @ModelAttribute("client") ClientDTO client, BindingResult result, Model model, RedirectAttributes redirAttrs) {
         validateClient(client, result);
         if (result.hasErrors()) {
-            return editClient(Optional.empty(), model);
+            return editClient(Optional.empty(), model, redirAttrs);
         }
 
         if (client.getId() != null) {
