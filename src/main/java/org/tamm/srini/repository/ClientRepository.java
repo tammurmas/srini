@@ -10,4 +10,8 @@ import org.tamm.srini.model.Client;
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Optional<Client> findOneById(Long id);
+
+    Optional<Client> findOneByEmailIgnoreCase(String email);
+
+    Optional<Client> findOneByUserNameIgnoreCase(String userName);
 }

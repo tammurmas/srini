@@ -98,4 +98,14 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    @Override
+    public Optional<Client> findClientByEmail(String email) {
+        return clientRepository.findOneByEmailIgnoreCase(email);
+    }
+
+    @Override
+    public Optional<Client> findClientByUserName(String userName) {
+        return clientRepository.findOneByUserNameIgnoreCase(userName);
+    }
+
 }
