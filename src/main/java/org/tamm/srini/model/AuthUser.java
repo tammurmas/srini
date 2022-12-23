@@ -20,12 +20,13 @@ import lombok.Setter;
 public class AuthUser implements Serializable {
 
     @Serial private static final long serialVersionUID = -2701394052323587696L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "username", length = 100, nullable = false)
-    private String userName;
+    private String username;
 
     @Column(name = "password", length = 100, nullable = false)
     private String password;

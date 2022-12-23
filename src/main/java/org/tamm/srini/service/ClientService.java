@@ -8,7 +8,7 @@ import org.tamm.srini.service.dto.ClientDTO;
 
 public interface ClientService {
 
-    List<ClientDTO> findAllUserClients();
+    List<ClientDTO> findAllByUser();
 
     Optional<ClientDTO> findClientById(long id);
 

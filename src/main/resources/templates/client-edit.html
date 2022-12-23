@@ -6,18 +6,13 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Add Client</title>
+    <title th:text="${client.id != null} ? 'Edit Client' : 'Add Client'"></title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
     <!--<link href="form-validation.css" rel="stylesheet">-->
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
 </head>
 
 <body class="bg-light">
@@ -29,25 +24,25 @@
 
         <div class="row">
             <div class="col-md-12 order-md-1">
-                <form class="needs-validation" novalidate method="POST" th:action="@{/save}" th:object="${client}">
+                <form class="needs-validation" novalidate method="POST" th:action="@{/client/save}" th:object="${client}">
                     <div class="row">
                         <input type="hidden" th:field="*{id}" />
                         <div class="col-md-6 mb-3">
                             <label for="firstName">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" th:field="*{firstName}">
-                            <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}"></p>
+                            <input type="text" class="form-control" id="firstName" placeholder="" th:field="*{firstname}">
+                            <p th:if="${#fields.hasErrors('firstname')}" th:errorclass="error" th:errors="*{firstname}"></p>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="lastName">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" th:field="*{lastName}">
-                            <p th:if="${#fields.hasErrors('lastName')}" th:errorclass="error" th:errors="*{lastName}"></p>
+                            <input type="text" class="form-control" id="lastName" placeholder="" th:field="*{lastname}">
+                            <p th:if="${#fields.hasErrors('lastname')}" th:errorclass="error" th:errors="*{lastname}"></p>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Username" th:field="*{userName}">
-                        <p th:if="${#fields.hasErrors('userName')}" th:errorclass="error" th:errors="*{userName}"></p>
+                        <input type="text" class="form-control" id="username" placeholder="Username" th:field="*{username}">
+                        <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}"></p>
                     </div>
 
                     <div class="mb-3">

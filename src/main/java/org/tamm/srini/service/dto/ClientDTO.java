@@ -18,15 +18,15 @@ public class ClientDTO {
 
     @NotBlank
     @Size(max = 100)
-    private String firstName;
+    private String firstname;
 
     @NotBlank
     @Size(max = 100)
-    private String lastName;
+    private String lastname;
 
     @NotBlank
     @Size(max = 100)
-    private String userName;
+    private String username;
 
     @Email
     @Size(max = 100)
@@ -42,9 +42,9 @@ public class ClientDTO {
     public static ClientDTO ofClient(Client client) {
         ClientDTO dto = new ClientDTO();
         dto.setId(client.getId());
-        dto.setFirstName(client.getFirstName());
-        dto.setLastName(client.getLastName());
-        dto.setUserName(client.getUserName());
+        dto.setFirstname(client.getFirstname());
+        dto.setLastname(client.getLastname());
+        dto.setUsername(client.getUsername());
         dto.setEmail(client.getEmail());
         dto.setAddress(client.getAddress());
         dto.setCountryId(client.getCountry().getId());

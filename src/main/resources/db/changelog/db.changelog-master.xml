@@ -72,11 +72,11 @@
         <sql>
             <![CDATA[
             INSERT INTO auth_user(username, password)
-            VALUES ('user1', '7c6a180b36896a0a8c02787eeafb0e4c');
+            VALUES ('user1', '$2a$12$WrJwMUSf9bcbaB31x.VFv.6nAYqUaLru0JFLsiypmwXDgbt7ShCdm');
             INSERT INTO auth_user(username, password)
-            VALUES ('user2', '6cb75f652a9b52798eb6cf2201057c73');
+            VALUES ('user2', '$2a$12$3A3n38TxYVpNuw3od6RWIOpuHdRWr37UiO2t1o6oCUnW.BdMZXfX.');
             INSERT INTO auth_user(username, password)
-            VALUES ('user3', '819b0643d6b89dc9b579fdfc9094f28e');
+            VALUES ('user3', '$2a$12$FhcMDp9N7KD5lQD9RK1KEOEp5QbFNBJ01.r.tjaxrq0AxIDll7ah.');
 
             INSERT INTO country(name) VALUES('Estonia');
             INSERT INTO country(name) VALUES('Latvia');

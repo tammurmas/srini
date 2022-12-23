@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamm.srini.model.AuthUser;
@@ -15,6 +16,7 @@ import org.tamm.srini.model.Client;
 import org.tamm.srini.model.Country;
 import org.tamm.srini.repository.ClientRepository;
 import org.tamm.srini.repository.CountryRepository;
+import org.tamm.srini.service.dto.AuthUserDetails;
 import org.tamm.srini.service.dto.ClientDTO;
 
 @Service
@@ -29,8 +31,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClientDTO> findAllUserClients() {
-        return clientRepository.findAll()
+    public List<ClientDTO> findAllByUser() {
+        return clientRepository.findAllByAuthUser(getAuthUser())
                 .stream()
                 .map(ClientDTO::ofClient)
                 .collect(Collectors.toList());
@@ -39,7 +41,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional(readOnly = true)
     public Optional<ClientDTO> findClientById(long id) {
-        Optional<Client> optionalClient = clientRepository.findOneById(id);
+        Optional<Client> optionalClient = clientRepository.findOneByIdAndAuthUser(id, getAuthUser());
         Optional<ClientDTO> dto = Optional.empty();
         if (optionalClient.isPresent()) {
             dto = Optional.of(ClientDTO.ofClient(optionalClient.get()));
@@ -54,18 +56,15 @@ public class ClientServiceImpl implements ClientService {
             throw new IllegalArgumentException("Country not found for provided id=" + clientDTO.getCountryId());
         }
         Client client = new Client();
-        client.setFirstName(clientDTO.getFirstName());
-        client.setLastName(clientDTO.getLastName());
-        client.setUserName(clientDTO.getUserName().toLowerCase(Locale.ROOT));
+        client.setFirstname(clientDTO.getFirstname());
+        client.setLastname(clientDTO.getLastname());
+        client.setUsername(clientDTO.getUsername().toLowerCase(Locale.ROOT));
         client.setEmail(clientDTO.getEmail());
         client.setAddress(clientDTO.getAddress());
         client.setCountry(optionalCountry.get());
-        // TODO: add logged in user ad creator and owner
-        client.setCreatedBy("1");
-        AuthUser authUser = new AuthUser();
-        authUser.setId(1L);
+        AuthUser authUser = getAuthUser();
+        client.setCreatedBy(String.valueOf(authUser.getId()));
         client.setAuthUser(authUser);
-
         client = clientRepository.save(client);
 
         log.info("Created new client: {}", client.getId());
@@ -74,7 +73,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client updateClient(ClientDTO clientDTO) {
-        Optional<Client> optionaClient = clientRepository.findOneById(clientDTO.getId());
+        Optional<Client> optionaClient = clientRepository.findOneByIdAndAuthUser(clientDTO.getId(), getAuthUser());
         if (optionaClient.isEmpty()) {
             throw new IllegalArgumentException("Client not found=" + clientDTO.getId());
         }
@@ -83,15 +82,13 @@ public class ClientServiceImpl implements ClientService {
             throw new IllegalArgumentException("Country not found for provided id=" + clientDTO.getCountryId());
         }
         Client client = optionaClient.get();
-        client.setFirstName(clientDTO.getFirstName());
-        client.setLastName(clientDTO.getLastName());
-        client.setUserName(clientDTO.getUserName().toLowerCase(Locale.ROOT));
+        client.setFirstname(clientDTO.getFirstname());
+        client.setLastname(clientDTO.getLastname());
+        client.setUsername(clientDTO.getUsername().toLowerCase(Locale.ROOT));
         client.setEmail(clientDTO.getEmail());
         client.setAddress(clientDTO.getAddress());
         client.setCountry(optionalCountry.get());
-        // TODO: add logged in user as updater
-        client.setUpdatedBy("1");
-
+        client.setUpdatedBy(String.valueOf(getAuthUser().getId()));
         client = clientRepository.save(client);
 
         log.info("Updated client: {}", client.getId());
@@ -105,7 +102,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Optional<Client> findClientByUserName(String userName) {
-        return clientRepository.findOneByUserNameIgnoreCase(userName);
+        return clientRepository.findOneByUsernameIgnoreCase(userName);
+    }
+
+    private static AuthUser getAuthUser() {
+        AuthUserDetails authUserDetails = (AuthUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return authUserDetails.getAuthUser();
     }
 
 }

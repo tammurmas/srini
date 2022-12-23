@@ -22,9 +22,10 @@
         </div>
 
         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
 
         <div class="row">
-            <a href="/add" class="btn btn-primary">Add client</a>
+            <a href="/client/add" class="btn btn-primary">Add client</a>
             <table class="table">
                 <thead>
                 <tr>
@@ -38,11 +39,11 @@
                 <tbody>
                 <tr th:each="client, iStat : ${clients}">
                     <th scope="row" th:text="${iStat.count}"></th>
-                    <td th:text="${client.firstName}"></td>
-                    <td th:text="${client.lastName}"></td>
-                    <td th:text="${client.userName}"></td>
+                    <td th:text="${client.firstname}"></td>
+                    <td th:text="${client.lastname}"></td>
+                    <td th:text="${client.username}"></td>
                     <td>
-                        <a th:href="@{/{id}/edit(id=${client.id})}" class="btn btn-primary">Edit client</a>
+                        <a th:href="@{/client/{id}/edit(id=${client.id})}" class="btn btn-primary">Edit client</a>
                     </td>
                 </tr>
                 <tr th:if="${clients.size() == 0}">

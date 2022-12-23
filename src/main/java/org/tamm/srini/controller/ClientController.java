@@ -24,6 +24,7 @@ import org.tamm.srini.service.dto.ClientDTO;
 import org.thymeleaf.util.StringUtils;
 
 @Controller
+@RequestMapping("/client")
 public class ClientController {
 
     @Autowired
@@ -33,7 +34,7 @@ public class ClientController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String showClientList(Model model) {
-        List<ClientDTO> clients = clientService.findAllUserClients();
+        List<ClientDTO> clients = clientService.findAllByUser();
         model.addAttribute("clients", clients);
         return "client-list";
     }
@@ -46,7 +47,7 @@ public class ClientController {
                 Optional<ClientDTO> optionalClient = clientService.findClientById(clientId.get());
                 if (optionalClient.isEmpty()) {
                     redirAttrs.addFlashAttribute("error", "Client not found!");
-                    return "redirect:/list";
+                    return "redirect:/client/list";
                 } else {
                     client = optionalClient.get();
                 }
@@ -67,11 +68,13 @@ public class ClientController {
 
         if (client.getId() != null) {
             clientService.updateClient(client);
+            redirAttrs.addFlashAttribute("success", "Client updated successfully!");
         } else {
             clientService.createClient(client);
+            redirAttrs.addFlashAttribute("success", "Client created successfully!");
         }
 
-        return "redirect:/list";
+        return "redirect:/client/list";
     }
 
     private void validateClient(ClientDTO client, Errors result) {
@@ -82,8 +85,8 @@ public class ClientController {
                 result.rejectValue("email", "", "Email is already in use");
             }
         }
-        if (!StringUtils.isEmptyOrWhitespace(client.getUserName())) {
-            Optional<Client> optionalClient = clientService.findClientByUserName(client.getUserName());
+        if (!StringUtils.isEmptyOrWhitespace(client.getUsername())) {
+            Optional<Client> optionalClient = clientService.findClientByUserName(client.getUsername());
             boolean isDuplicateUserName = optionalClient.isPresent() && !optionalClient.get().getId().equals(client.getId());
             if (isDuplicateUserName) {
                 result.rejectValue("userName", "", "Username is already in use");

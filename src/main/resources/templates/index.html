@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index page</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="py-5 text-center">
+        <h2>Welcome</h2>
+        <br />
+        <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+            <p><a th:href="@{/login}" th:text="'Log in'"></a></p>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <p>Currently logged in as: <b><span sec:authentication="name"></span></b> <a th:href="@{/logout}">Log out</a></p>
+            <h5><a th:href="@{/client/list}" th:text="'Client list'"></a></h5>
+        </div>
+    </div>
+
+</body>
+</html>

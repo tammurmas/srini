@@ -30,13 +30,13 @@ public class Client implements Serializable {
     private Long id;
 
     @Column(name = "firstname", nullable = false, length = 100)
-    private String firstName;
+    private String firstname;
 
     @Column(name = "lastname", nullable = false, length = 100)
-    private String lastName;
+    private String lastname;
 
     @Column(name = "username", nullable = false, length = 100)
-    private String userName;
+    private String username;
 
     @Column(name = "email", length = 100)
     private String email;
