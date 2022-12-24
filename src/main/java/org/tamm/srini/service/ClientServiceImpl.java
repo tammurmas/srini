@@ -5,9 +5,10 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,17 +21,16 @@ import org.tamm.srini.service.dto.AuthUserDetails;
 import org.tamm.srini.service.dto.ClientDTO;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     private final Logger log = LoggerFactory.getLogger(ClientServiceImpl.class);
 
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private CountryRepository countryRepository;
+    private final ClientRepository clientRepository;
+    private final CountryRepository countryRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<ClientDTO> findAllByUser() {
         return clientRepository.findAllByAuthUser(getAuthUser())
                 .stream()
@@ -39,7 +39,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<ClientDTO> findClientById(long id) {
         Optional<Client> optionalClient = clientRepository.findOneByIdAndAuthUser(id, getAuthUser());
         Optional<ClientDTO> dto = Optional.empty();
