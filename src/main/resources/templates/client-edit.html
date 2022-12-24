@@ -11,6 +11,12 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
     <!-- Custom styles for this template -->
     <!--<link href="form-validation.css" rel="stylesheet">-->
 </head>
@@ -28,13 +34,13 @@
                     <div class="row">
                         <input type="hidden" th:field="*{id}" />
                         <div class="col-md-6 mb-3">
-                            <label for="firstName">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" th:field="*{firstname}">
+                            <label for="firstname">First name</label>
+                            <input type="text" class="form-control" id="firstname" placeholder="" th:field="*{firstname}">
                             <p th:if="${#fields.hasErrors('firstname')}" th:errorclass="error" th:errors="*{firstname}"></p>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="lastName">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" th:field="*{lastname}">
+                            <label for="lastname">Last name</label>
+                            <input type="text" class="form-control" id="lastname" placeholder="" th:field="*{lastname}">
                             <p th:if="${#fields.hasErrors('lastname')}" th:errorclass="error" th:errors="*{lastname}"></p>
                         </div>
                     </div>

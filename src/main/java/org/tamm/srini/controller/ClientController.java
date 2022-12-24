@@ -86,10 +86,10 @@ public class ClientController {
             }
         }
         if (!StringUtils.isEmptyOrWhitespace(client.getUsername())) {
-            Optional<Client> optionalClient = clientService.findClientByUserName(client.getUsername());
-            boolean isDuplicateUserName = optionalClient.isPresent() && !optionalClient.get().getId().equals(client.getId());
-            if (isDuplicateUserName) {
-                result.rejectValue("userName", "", "Username is already in use");
+            Optional<Client> optionalClient = clientService.findClientByUsername(client.getUsername());
+            boolean isDuplicateUsername = optionalClient.isPresent() && !optionalClient.get().getId().equals(client.getId());
+            if (isDuplicateUsername) {
+                result.rejectValue("username", "", "Username is already in use");
             }
         }
     }

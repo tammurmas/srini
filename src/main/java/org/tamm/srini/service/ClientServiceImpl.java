@@ -101,8 +101,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<Client> findClientByUserName(String userName) {
-        return clientRepository.findOneByUsernameIgnoreCase(userName);
+    public Optional<Client> findClientByUsername(String username) {
+        return clientRepository.findOneByUsernameIgnoreCase(username);
     }
 
     private static AuthUser getAuthUser() {

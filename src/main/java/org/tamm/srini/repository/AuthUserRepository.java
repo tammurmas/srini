@@ -9,6 +9,6 @@ import org.tamm.srini.model.AuthUser;
 @Repository
 public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
 
-    Optional<AuthUser> findOneByUsername(String userName);
+    Optional<AuthUser> findOneByUsername(String username);
 
 }

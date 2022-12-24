@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                         .passwordParameter("password")
                         .permitAll()
                 )
-                .csrf().disable().logout() // TODO: to simplify testing, remove in production
+                .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/");
 
