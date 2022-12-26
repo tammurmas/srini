@@ -41,7 +41,7 @@ public class Client implements Serializable {
     @Column(name = "email", length = 100)
     private String email;
 
-    @Column(name = "address", nullable = false, length = 100)
+    @Column(name = "address", nullable = false, length = 300)
     private String address;
 
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
