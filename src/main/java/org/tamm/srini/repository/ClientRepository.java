@@ -1,14 +1,12 @@
 package org.tamm.srini.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import org.tamm.srini.model.AuthUser;
 import org.tamm.srini.model.Client;
 
-@Repository
+import java.util.List;
+import java.util.Optional;
+
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
     List<Client> findAllByAuthUser(AuthUser user);

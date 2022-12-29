@@ -1,29 +1,17 @@
 package org.tamm.srini.model;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-public class Client implements Serializable {
-
-    @Serial private static final long serialVersionUID = -7752498872250311112L;
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

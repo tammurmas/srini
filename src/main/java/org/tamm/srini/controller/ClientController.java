@@ -1,21 +1,12 @@
 package org.tamm.srini.controller;
 
-import java.util.List;
-import java.util.Optional;
-
 import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tamm.srini.model.Client;
 import org.tamm.srini.service.ClientService;
@@ -23,16 +14,18 @@ import org.tamm.srini.service.CountryService;
 import org.tamm.srini.service.dto.ClientDTO;
 import org.thymeleaf.util.StringUtils;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/client")
 public class ClientController {
 
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private CountryService countryService;
+    private final ClientService clientService;
+    private final CountryService countryService;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @GetMapping(value = "/list")
     public String showClientList(Model model) {
         List<ClientDTO> clients = clientService.findAllByUser();
         model.addAttribute("clients", clients);

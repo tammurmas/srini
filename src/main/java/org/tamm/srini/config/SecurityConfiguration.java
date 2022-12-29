@@ -19,11 +19,11 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
-        http.authorizeHttpRequests((requests) -> requests
+        http.authorizeHttpRequests(requests -> requests
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin((form) -> form
+                .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
