@@ -1,7 +1,6 @@
 package org.tamm.srini.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +21,7 @@ public class CountryServiceImpl implements CountryService {
         return countryRepository.findAll()
                 .stream()
                 .map(CountryDTO::ofCountry)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

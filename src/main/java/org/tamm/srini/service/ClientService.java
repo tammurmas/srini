@@ -3,7 +3,6 @@ package org.tamm.srini.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.tamm.srini.model.Client;
 import org.tamm.srini.service.dto.ClientDTO;
 
 public interface ClientService {
@@ -12,11 +11,11 @@ public interface ClientService {
 
     Optional<ClientDTO> findClientById(long id);
 
-    Client createClient(ClientDTO clientDTO);
+    ClientDTO createClient(ClientDTO clientDTO);
 
-    Client updateClient(ClientDTO clientDTO);
+    ClientDTO updateClient(ClientDTO clientDTO);
 
-    Optional<Client> findClientByEmail(String email);
+    Optional<ClientDTO> findClientByEmail(String email);
 
-    Optional<Client> findClientByUsername(String username);
+    Optional<ClientDTO> findClientByUsername(String username);
 }

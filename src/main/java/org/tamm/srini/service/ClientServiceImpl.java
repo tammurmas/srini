@@ -3,7 +3,6 @@ package org.tamm.srini.service;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,21 +34,17 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findAllByAuthUser(getAuthUser())
                 .stream()
                 .map(ClientDTO::ofClient)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public Optional<ClientDTO> findClientById(long id) {
         Optional<Client> optionalClient = clientRepository.findOneByIdAndAuthUser(id, getAuthUser());
-        Optional<ClientDTO> dto = Optional.empty();
-        if (optionalClient.isPresent()) {
-            dto = Optional.of(ClientDTO.ofClient(optionalClient.get()));
-        }
-        return dto;
+        return getClientDTO(optionalClient);
     }
 
     @Override
-    public Client createClient(ClientDTO clientDTO) {
+    public ClientDTO createClient(ClientDTO clientDTO) {
         Optional<Country> optionalCountry = countryRepository.findById(clientDTO.getCountryId());
         if (optionalCountry.isEmpty()) {
             throw new IllegalArgumentException("Country not found for provided id=" + clientDTO.getCountryId());
@@ -64,14 +59,14 @@ public class ClientServiceImpl implements ClientService {
         AuthUser authUser = getAuthUser();
         client.setCreatedBy(String.valueOf(authUser.getId()));
         client.setAuthUser(authUser);
-        client = clientRepository.save(client);
+        Client updatedClient = clientRepository.save(client);
 
         log.info("Created new client: {}", client.getId());
-        return client;
+        return ClientDTO.ofClient(updatedClient);
     }
 
     @Override
-    public Client updateClient(ClientDTO clientDTO) {
+    public ClientDTO updateClient(ClientDTO clientDTO) {
         Optional<Client> optionaClient = clientRepository.findOneByIdAndAuthUser(clientDTO.getId(), getAuthUser());
         if (optionaClient.isEmpty()) {
             throw new IllegalArgumentException("Client not found=" + clientDTO.getId());
@@ -88,25 +83,37 @@ public class ClientServiceImpl implements ClientService {
         client.setAddress(clientDTO.getAddress());
         client.setCountry(optionalCountry.get());
         client.setUpdatedBy(String.valueOf(getAuthUser().getId()));
-        client = clientRepository.save(client);
+        Client persistedClient = clientRepository.save(client);
 
         log.info("Updated client: {}", client.getId());
-        return client;
+        return ClientDTO.ofClient(persistedClient);
     }
 
     @Override
-    public Optional<Client> findClientByEmail(String email) {
-        return clientRepository.findOneByEmailIgnoreCase(email);
+    public Optional<ClientDTO> findClientByEmail(String email) {
+        Optional<Client> optionalClient = clientRepository.findOneByEmailIgnoreCase(email);
+        return getClientDTO(optionalClient);
     }
 
     @Override
-    public Optional<Client> findClientByUsername(String username) {
-        return clientRepository.findOneByUsernameIgnoreCase(username);
+    public Optional<ClientDTO> findClientByUsername(String username) {
+        Optional<Client> optionalClient = clientRepository.findOneByUsernameIgnoreCase(username);
+        return getClientDTO(optionalClient);
     }
 
     private static AuthUser getAuthUser() {
         AuthUserDetails authUserDetails = (AuthUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return authUserDetails.getAuthUser();
+    }
+
+    private static Optional<ClientDTO> getClientDTO(Optional<Client> optionalClient) {
+        Optional<ClientDTO> optionalDto = Optional.empty();
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+            ClientDTO dto = ClientDTO.ofClient(client);
+            optionalDto = Optional.of(dto);
+        }
+        return optionalDto;
     }
 
 }
