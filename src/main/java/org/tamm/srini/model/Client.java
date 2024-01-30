@@ -2,15 +2,18 @@ package org.tamm.srini.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.tamm.srini.service.dto.ClientDTO;
 
 import java.util.Date;
+import java.util.Locale;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 public class Client {
 
     @Id
@@ -53,5 +56,30 @@ public class Client {
     @ManyToOne
     @JoinColumn(name = "auth_user_id")
     private AuthUser authUser;
+
+    private Client(ClientDTO clientDTO, Country country, AuthUser authUser) {
+        firstname = clientDTO.getFirstname();
+        lastname = clientDTO.getLastname();
+        username = clientDTO.getUsername().toLowerCase(Locale.ROOT);
+        email = clientDTO.getEmail();
+        address = clientDTO.getAddress();
+        createdBy = String.valueOf(authUser.getId());
+        this.country = country;
+        this.authUser = authUser;
+    }
+
+    public static Client create(ClientDTO clientDTO, Country country, AuthUser authUser) {
+        return new Client(clientDTO, country, authUser);
+    }
+
+    public void update(ClientDTO clientDTO, Country country, AuthUser authUser) {
+        firstname = clientDTO.getFirstname();
+        lastname = clientDTO.getLastname();
+        username = clientDTO.getUsername().toLowerCase(Locale.ROOT);
+        email = clientDTO.getEmail();
+        address = clientDTO.getAddress();
+        this.country = country;
+        updatedBy = String.valueOf(authUser.getId());
+    }
 
 }

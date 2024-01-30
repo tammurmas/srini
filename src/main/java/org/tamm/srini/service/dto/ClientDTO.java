@@ -10,6 +10,8 @@ import lombok.Setter;
 
 import org.tamm.srini.model.Client;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 public class ClientDTO {
@@ -39,7 +41,7 @@ public class ClientDTO {
     @NotNull
     private Long countryId;
 
-    public static ClientDTO ofClient(Client client) {
+    public static ClientDTO ofClientEntity(Client client) {
         ClientDTO dto = new ClientDTO();
         dto.setId(client.getId());
         dto.setFirstname(client.getFirstname());
@@ -50,5 +52,10 @@ public class ClientDTO {
         dto.setCountryId(client.getCountry().getId());
 
         return dto;
+    }
+
+    public static Optional<ClientDTO> getOptionalClientDTO(Client client) {
+        ClientDTO clientDTO = ofClientEntity(client);
+        return Optional.of(clientDTO);
     }
 }
